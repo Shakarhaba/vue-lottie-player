@@ -5,48 +5,48 @@ export default {
   props: {
     name: {
       type: String,
-      default: () => "lottie-" + Math.random()
+      default: () => "lottie-" + Math.random(),
     },
     width: {
       type: [String, Number],
-      default: () => "200px"
+      default: () => "200px",
     },
     height: {
       type: [String, Number],
-      default: () => "200px"
+      default: () => "200px",
     },
     background: {
       type: String,
-      default: "transparent"
+      default: "transparent",
     },
 
     loop: {
       type: [Boolean, Number],
-      default: () => false
+      default: () => false,
     },
     autoplay: {
       type: Boolean,
-      default: () => true
+      default: () => true,
     },
     renderer: {
       type: String,
-      default: () => "svg"
+      default: () => "svg",
     },
     path: {
       type: String,
-      default: () => null
+      default: () => null,
     },
     animationData: {
       type: Object,
-      default: () => null
-    }
+      default: () => null,
+    },
   },
 
-  data: vm => ({
+  data: (vm) => ({
     style: {
       width: vm.getSize(vm.width),
       height: vm.getSize(vm.height),
-      background: vm.background
+      background: vm.background,
     },
     animation: null,
   }),
@@ -56,13 +56,27 @@ export default {
   },
 
   methods: {
-    getSize(size) {
-      return typeof size == Number ? `${size}px` : size;
+    play() {
+      if (this.animation !== null) {
+        this.animation.play();
+      }
     },
-
+    stop() {
+      if (this.animation !== null) {
+        this.animation.stop();
+      }
+    },
+    pause() {
+      if (this.animation !== null) {
+        this.animation.pause();
+      }
+    },
+    getSize(size) {
+      return typeof size === "number" ? `${size}px` : size;
+    },
     loadAnimation() {
-      let anim = lottie.loadAnimation({
-        container: this.$refs.animContainer,
+      let animation = lottie.loadAnimation({
+        container: this.$refs.container,
         name: this.name,
         renderer: this.renderer,
         loop: this.loop,
@@ -70,16 +84,16 @@ export default {
         width: this.getSize(this.width),
         height: this.getSize(this.height),
         path: this.path,
-        animationData: this.animationData
+        animationData: this.animationData,
       });
 
-      this.animation = anim
-      this.$emit("animControl", anim);
-    }
-  }
+      this.animation = animation;
+      this.$emit("lottie", animation);
+    },
+  },
 };
 </script>
 
 <template>
-  <div :style="style" ref="animContainer"></div>
+  <div :style="style" ref="container"></div>
 </template>

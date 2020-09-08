@@ -65,8 +65,8 @@ import VueLottiePlayer from "vue-lottie-player";
 export default {
   name: "MyComponent",
   components: {
-    vLottiePlayer: VueLottiePlayer
-  }
+    vLottiePlayer: VueLottiePlayer,
+  },
 };
 </script>
 
@@ -112,4 +112,4 @@ Props:
 - width: player width (default: 200px)
 - height: player height (default: 200px)
 - background: player background (default: transparent)
-- @animControl: Returns the lottie-web animation controller for custom event hookup & direct access to the lottie instance.
+- @lottie: Returns the lottie-web animation controller for custom event hookup & direct access to the lottie instance.
