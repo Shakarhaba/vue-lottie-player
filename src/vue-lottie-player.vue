@@ -46,38 +46,34 @@ export default {
       type: String,
       default: () => null,
     },
-    initial: {
+    animationData: {
       type: Object,
       default: () => null,
     },
   },
-
   data: (vm) => ({
     style: {
       width: vm.getSize(vm.width),
       height: vm.getSize(vm.height),
       background: vm.background,
     },
-    data: null,
     animation: null,
   }),
-  beforeMount() {
-    this.data = this.initial;
-  },
+
   mounted() {
     this.loadAnimation();
   },
   watch: {
-    /* data () {
+    animationData() {
       this.loadAnimation();
-    } */
+    },
   },
   methods: {
     replaceOnLoopComplete(replacement, options = {}) {
       this.$on("loopComplete", () => {
         this.pause();
         this.destroy();
-        this.data = replacement;
+        this.loadAnimation(replacement, options);
       });
     },
     click(e) {
@@ -142,12 +138,12 @@ export default {
         this.animation.setDirection(direction);
       }
     },
-    goToAndStop(frame, isFrame = true) {
+    goToAndStop(frame) {
       if (this.animation !== null) {
-        this.animation.goToAndStop(frame, isFrame);
+        this.animation.goToAndStop(frame);
       }
     },
-    destroy() {
+    destroy(frame) {
       if (this.animation !== null) {
         this.animation.destroy();
       }
@@ -155,21 +151,23 @@ export default {
     getSize(size) {
       return typeof size === "number" ? `${size}px` : size;
     },
-    loadAnimation() {
-      const options = {
-        container: this.$refs.container,
-        name: this.name,
-        renderer: this.renderer,
-        loop: this.loop,
-        autoplay: this.autoplay,
-        width: this.getSize(this.width),
-        height: this.getSize(this.height),
-        path: this.path,
-        data: this.data,
-      };
-      let animation = lottie.loadAnimation(options);
+    loadAnimation(animationData = null, options = {}) {
+      const lottieConfig = Object.assign(
+        {
+          container: this.$refs.container,
+          name: this.name,
+          renderer: this.renderer,
+          loop: this.loop,
+          autoplay: this.autoplay,
+          width: this.getSize(this.width),
+          height: this.getSize(this.height),
+          path: this.path,
+        },
+        options
+      );
+      lottieConfig.animationData = animationData || this.animationData;
 
-      this.animation = animation;
+      this.animation = lottie.loadAnimation(lottieConfig);
 
       this.animation.addEventListener("complete", (e) => {
         this.$emit("complete", { node: this, event: e });
@@ -196,7 +194,7 @@ export default {
         this.$emit("destroy", { node: this, event: e });
       });
 
-      this.$emit("lottie", animation);
+      this.$emit("lottie", this.animation);
     },
   },
 };
