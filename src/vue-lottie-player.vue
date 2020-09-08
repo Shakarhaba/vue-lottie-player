@@ -56,8 +56,34 @@ export default {
   },
 
   methods: {
+    mute() {
+      if (this.animation !== null) {
+        this.animation.mute();
+      }
+    },
+    unmute() {
+      if (this.animation !== null) {
+        this.animation.unmute();
+      }
+    },
+    volume(volume) {
+      if (this.animation !== null) {
+        this.animation.setVolume(volume);
+      }
+    },
     play() {
       if (this.animation !== null) {
+        this.animation.play();
+      }
+    },
+    reset() {
+      if (this.animation !== null) {
+        this.animation.goToAndStop(0);
+      }
+    },
+    replay() {
+      if (this.animation !== null) {
+        this.animation.goToAndStop(0);
         this.animation.play();
       }
     },
@@ -71,9 +97,24 @@ export default {
         this.animation.pause();
       }
     },
+    togglePause() {
+      if (this.animation !== null) {
+        this.animation.togglePause();
+      }
+    },
     speed(speed) {
       if (this.animation !== null) {
         this.animation.setSpeed(Number(speed));
+      }
+    },
+    setDirection(direction) {
+      if (this.animation !== null) {
+        this.animation.setDirection(direction);
+      }
+    },
+    goToAndStop(frame) {
+      if (this.animation !== null) {
+        this.animation.goToAndStop(frame);
       }
     },
     getSize(size) {
