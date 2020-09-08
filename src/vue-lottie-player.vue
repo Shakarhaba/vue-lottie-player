@@ -34,6 +34,10 @@ export default {
       type: [Boolean, Number],
       default: () => false,
     },
+    autoSize: {
+      type: Boolean,
+      default: () => false,
+    },
     autoplay: {
       type: Boolean,
       default: () => true,
@@ -53,13 +57,16 @@ export default {
   },
   data: (vm) => ({
     style: {
-      width: vm.getSize(vm.width),
-      height: vm.getSize(vm.height),
       background: vm.background,
     },
     animation: null,
   }),
-
+  beforeMount() {
+    if (this.autoSize) {
+      this.style.width = vm.getSize(vm.width);
+      this.style.height = vm.getSize(vm.height);
+    }
+  },
   mounted() {
     this.loadAnimation();
   },
