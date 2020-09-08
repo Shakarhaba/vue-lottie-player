@@ -97,9 +97,11 @@ export default {
         this.animation.setVolume(volume);
       }
     },
-    play() {
+    play(delay = 0) {
       if (this.animation !== null) {
-        this.animation.play();
+        window.setTimeout(() => {
+          this.animation.play();
+        }, delay);
       }
     },
     reset() {
