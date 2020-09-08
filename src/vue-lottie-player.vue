@@ -47,7 +47,8 @@ export default {
       width: vm.getSize(vm.width),
       height: vm.getSize(vm.height),
       background: vm.background
-    }
+    },
+    animation: null,
   }),
 
   mounted() {
@@ -72,6 +73,7 @@ export default {
         animationData: this.animationData
       });
 
+      this.animation = anim
       this.$emit("animControl", anim);
     }
   }
