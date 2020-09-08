@@ -92,6 +92,8 @@ export default {
         animationData: this.animationData,
       });
 
+      this.animation = animation;
+
       this.animation.addEventListener("complete", (e) => {
         this.$emit("complete", { node: this, event: e });
       });
@@ -117,7 +119,6 @@ export default {
         this.$emit("destroy", { node: this, event: e });
       });
 
-      this.animation = animation;
       this.$emit("lottie", animation);
     },
   },
