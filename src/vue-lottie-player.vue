@@ -126,5 +126,10 @@ export default {
 </script>
 
 <template>
-  <div :style="style" ref="container"></div>
+  <div
+    :style="style"
+    ref="container"
+    @click="$emit('click', $event)"
+    @dblclick="$emit('dblclick', $event)"
+  ></div>
 </template>
