@@ -1,3 +1,13 @@
+<template>
+  <div
+    class="vue-lottie-container"
+    :style="style"
+    ref="container"
+    v-on:click="click"
+    v-on:dblclick="dblclick"
+  ></div>
+</template>
+
 <script>
 import lottie from "lottie-web";
 
@@ -56,6 +66,12 @@ export default {
   },
 
   methods: {
+    click(e) {
+      this.$emit("click", e);
+    },
+    dblclick(e) {
+      this.$emit("dblclick", e);
+    },
     mute() {
       if (this.animation !== null) {
         this.animation.mute();
@@ -165,12 +181,3 @@ export default {
   },
 };
 </script>
-
-<template>
-  <div
-    :style="style"
-    ref="container"
-    @click="$emit('click', $event)"
-    @dblclick="$emit('dblclick', $event)"
-  ></div>
-</template>
