@@ -71,6 +71,11 @@ export default {
         this.animation.pause();
       }
     },
+    speed(speed) {
+      if (this.animation !== null) {
+        this.animation.setSpeed(Number(speed));
+      }
+    },
     getSize(size) {
       return typeof size === "number" ? `${size}px` : size;
     },
@@ -85,6 +90,31 @@ export default {
         height: this.getSize(this.height),
         path: this.path,
         animationData: this.animationData,
+      });
+
+      this.animation.addEventListener("complete", (e) => {
+        this.$emit("complete", { node: this, event: e });
+      });
+      this.animation.addEventListener("loopComplete", (e) => {
+        this.$emit("loopComplete", { node: this, event: e });
+      });
+      this.animation.addEventListener("enterFrame", (e) => {
+        this.$emit("enterFrame", { node: this, event: e });
+      });
+      this.animation.addEventListener("segmentStart", (e) => {
+        this.$emit("segmentStart", { node: this, event: e });
+      });
+      this.animation.addEventListener("config_ready", (e) => {
+        this.$emit("configReady", { node: this, event: e });
+      });
+      this.animation.addEventListener("data_ready", (e) => {
+        this.$emit("dataReady", { node: this, event: e });
+      });
+      this.animation.addEventListener("DOMLoaded", (e) => {
+        this.$emit("DOMLoaded", { node: this, event: e });
+      });
+      this.animation.addEventListener("destroy", (e) => {
+        this.$emit("destroy", { node: this, event: e });
       });
 
       this.animation = animation;
