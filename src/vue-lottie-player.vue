@@ -46,7 +46,7 @@ export default {
       type: String,
       default: () => null,
     },
-    animationData: {
+    initial: {
       type: Object,
       default: () => null,
     },
@@ -58,14 +58,28 @@ export default {
       height: vm.getSize(vm.height),
       background: vm.background,
     },
+    data: null,
     animation: null,
   }),
-
+  beforeMount() {
+    this.data = this.initial;
+  },
   mounted() {
     this.loadAnimation();
   },
-
+  watch: {
+    /* data () {
+      this.loadAnimation();
+    } */
+  },
   methods: {
+    replaceOnLoopComplete(replacement, options = {}) {
+      this.$on("loopComplete", () => {
+        this.pause();
+        this.destroy();
+        this.data = replacement;
+      });
+    },
     click(e) {
       this.$emit("click", e);
     },
@@ -128,16 +142,21 @@ export default {
         this.animation.setDirection(direction);
       }
     },
-    goToAndStop(frame) {
+    goToAndStop(frame, isFrame = true) {
       if (this.animation !== null) {
-        this.animation.goToAndStop(frame);
+        this.animation.goToAndStop(frame, isFrame);
+      }
+    },
+    destroy() {
+      if (this.animation !== null) {
+        this.animation.destroy();
       }
     },
     getSize(size) {
       return typeof size === "number" ? `${size}px` : size;
     },
     loadAnimation() {
-      let animation = lottie.loadAnimation({
+      const options = {
         container: this.$refs.container,
         name: this.name,
         renderer: this.renderer,
@@ -146,8 +165,9 @@ export default {
         width: this.getSize(this.width),
         height: this.getSize(this.height),
         path: this.path,
-        animationData: this.animationData,
-      });
+        data: this.data,
+      };
+      let animation = lottie.loadAnimation(options);
 
       this.animation = animation;
 
